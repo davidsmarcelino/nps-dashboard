@@ -1,9 +1,14 @@
 {
   "name": "react_repo",
+  "homepage": "https://davidsmarcelino.github.io/nps-dashboard/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
