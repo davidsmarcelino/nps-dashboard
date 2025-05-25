@@ -104,7 +104,6 @@ const Dashboard: React.FC<DashboardProps> = ({ npsData }) => {
       </p>
     </CardContent>
   </Card>
-</div>
 
       {/* Métricas principais */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -215,6 +214,8 @@ const Dashboard: React.FC<DashboardProps> = ({ npsData }) => {
           </div>
         </div>
       </div>
+    </div> {/* <-- ADICIONE ESTA LINHA FINALMENTE! */}
+);
       
       {/* Informações de Debug (opcional - pode ser removido em produção) */}
       {process.env.NODE_ENV === 'development' && (
