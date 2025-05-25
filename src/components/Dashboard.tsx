@@ -214,7 +214,7 @@ const Dashboard: React.FC<DashboardProps> = ({ npsData }) => {
           </div>
         </div>
       </div>
-    </div> {/* <-- ADICIONE ESTA LINHA FINALMENTE! */}
+    </div>
 );
       
       {/* Informações de Debug (opcional - pode ser removido em produção) */}
