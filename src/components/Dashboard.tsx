@@ -1,19 +1,3 @@
-/**
- * Dashboard.tsx
- * 
- * Componente que exibe o dashboard com os resultados do NPS.
- * 
- * Este componente recebe os dados processados do NPS e os exibe em
- * diferentes visualizações:
- * - Pontuação NPS principal
- * - Métricas de promotores, neutros e detratores
- * - Gráfico de barras com distribuição de notas
- * - Gráfico de pizza com distribuição por categoria
- * - Explicação sobre o NPS
- * 
- * O código foi projetado para ser claro e fácil de personalizar.
- */
-
 import React from 'react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -21,57 +5,40 @@ import {
 } from 'recharts';
 import { NPSData, NPSCategory, getNPSClassification, getNPSColor } from '../lib/npsUtils';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
-// Props do componente Dashboard
+
 interface DashboardProps {
   npsData: NPSData;
 }
 
-/**
- * Componente Dashboard
- * 
- * Exibe visualizações dos dados de NPS processados.
- * 
- * @param npsData Dados de NPS processados
- */
 const Dashboard: React.FC<DashboardProps> = ({ npsData }) => {
-  // Preparar dados para o gráfico de barras (distribuição de notas)
   const barData = Object.entries(npsData.respostasPorNota).map(([nota, quantidade]) => ({
     nota: parseInt(nota),
     quantidade,
     categoria: npsData.categoriaPorNota[parseInt(nota)]
   }));
 
-  // Preparar dados para o gráfico de pizza (distribuição por categoria)
   const pieData = [
     { name: 'Promotores', value: npsData.percentualPromotores, color: '#2ECC40' },
     { name: 'Neutros', value: npsData.percentualNeutros, color: '#FFDC00' },
     { name: 'Detratores', value: npsData.percentualDetratores, color: '#FF4136' }
   ];
 
-  // Obter classificação qualitativa e cor do NPS
   const npsClassification = getNPSClassification(npsData.score);
   const npsColor = getNPSColor(npsData.score);
 
-  /**
-   * Obtém a cor associada a uma categoria de NPS
-   * 
-   * @param category Categoria de NPS (detrator, neutro, promotor)
-   * @returns Código de cor hexadecimal
-   */
   const getCategoryColor = (category: NPSCategory): string => {
     switch (category) {
       case NPSCategory.DETRATOR:
-        return '#FF4136'; // Vermelho
+        return '#FF4136';
       case NPSCategory.NEUTRO:
-        return '#FFDC00'; // Amarelo
+        return '#FFDC00';
       case NPSCategory.PROMOTOR:
-        return '#2ECC40'; // Verde
+        return '#2ECC40';
       default:
-        return '#AAAAAA'; // Cinza (caso padrão)
+        return '#AAAAAA';
     }
   };
 
-  // Informações de debug (opcional, pode ser removido em produção)
   const debugInfo = {
     colunaIdentificada: npsData.colunasIdentificadas,
     respostasInvalidas: npsData.respostasInvalidas,
@@ -80,34 +47,31 @@ const Dashboard: React.FC<DashboardProps> = ({ npsData }) => {
   };
 
   return (
-   <div className="space-y-8">
-  {/* Cabeçalho com pontuação NPS */}
-  <Card className="flex flex-col items-center justify-center p-6 text-center">
-    <CardHeader className="p-0 mb-4">
-      <CardTitle className="text-xl font-medium text-gray-700">Pontuação NPS</CardTitle>
-      {npsData?.totalRespostas !== undefined && npsData.totalRespostas !== null && (
-          <CardDescription className="text-sm text-gray-500 mt-1">
+    <div className="space-y-8">
+      <Card className="flex flex-col items-center justify-center p-6 text-center">
+        <CardHeader className="p-0 mb-4">
+          <CardTitle className="text-xl font-medium text-gray-700">Pontuação NPS</CardTitle>
+          {npsData?.totalRespostas !== undefined && npsData.totalRespostas !== null && (
+            <CardDescription className="text-sm text-gray-500 mt-1">
               Baseado em {npsData?.totalRespostas} respostas válidas
               {npsData.respostasInvalidas > 0 && ` (${npsData.respostasInvalidas} respostas inválidas ignoradas)`}
-          </CardDescription>
-      )}
-    </CardHeader>
-    <CardContent className="flex-grow flex flex-col items-center justify-center p-0">
-      <div
-        className="text-5xl font-bold rounded-full w-32 h-32 flex items-center justify-center"
-        style={{ backgroundColor: npsColor, color: npsColor === '#FFDC00' ? '#333' : 'white' }}
-      >
-        {npsData.score !== null && npsData.score !== undefined ? npsData.score : '--'}
-      </div>
-      <p className="mt-4 text-lg font-medium" style={{ color: npsColor }}>
-        {npsClassification}
-      </p>
-    </CardContent>
-  </Card>
+            </CardDescription>
+          )}
+        </CardHeader>
+        <CardContent className="flex-grow flex flex-col items-center justify-center p-0">
+          <div
+            className="text-5xl font-bold rounded-full w-32 h-32 flex items-center justify-center"
+            style={{ backgroundColor: npsColor, color: npsColor === '#FFDC00' ? '#333' : 'white' }}
+          >
+            {npsData.score !== null && npsData.score !== undefined ? npsData.score : '--'}
+          </div>
+          <p className="mt-4 text-lg font-medium" style={{ color: npsColor }}>
+            {npsClassification}
+          </p>
+        </CardContent>
+      </Card>
 
-      {/* Métricas principais */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Promotores */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-medium text-gray-700 mb-2">Promotores</h3>
           <p className="text-3xl font-bold text-green-600">{npsData.percentualPromotores.toFixed(1)}%</p>
@@ -115,7 +79,6 @@ const Dashboard: React.FC<DashboardProps> = ({ npsData }) => {
           <p className="text-xs text-gray-400 mt-2">Notas 9-10</p>
         </div>
         
-        {/* Neutros */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-medium text-gray-700 mb-2">Neutros</h3>
           <p className="text-3xl font-bold text-yellow-500">{npsData.percentualNeutros.toFixed(1)}%</p>
@@ -123,7 +86,6 @@ const Dashboard: React.FC<DashboardProps> = ({ npsData }) => {
           <p className="text-xs text-gray-400 mt-2">Notas 7-8</p>
         </div>
         
-        {/* Detratores */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-medium text-gray-700 mb-2">Detratores</h3>
           <p className="text-3xl font-bold text-red-600">{npsData.percentualDetratores.toFixed(1)}%</p>
@@ -132,9 +94,7 @@ const Dashboard: React.FC<DashboardProps> = ({ npsData }) => {
         </div>
       </div>
 
-      {/* Gráficos */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Gráfico de distribuição de notas */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-medium text-gray-700 mb-4">Distribuição de Notas</h3>
           <div className="h-80">
@@ -161,7 +121,6 @@ const Dashboard: React.FC<DashboardProps> = ({ npsData }) => {
           </div>
         </div>
 
-        {/* Gráfico de distribuição por categoria */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-medium text-gray-700 mb-4">Distribuição por Categoria</h3>
           <div className="h-80">
@@ -194,7 +153,6 @@ const Dashboard: React.FC<DashboardProps> = ({ npsData }) => {
         </div>
       </div>
 
-      {/* Explicação do NPS */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <h3 className="text-lg font-medium text-gray-700 mb-2">Sobre o NPS</h3>
         <p className="text-gray-600">
@@ -214,10 +172,7 @@ const Dashboard: React.FC<DashboardProps> = ({ npsData }) => {
           </div>
         </div>
       </div>
-    </div>
-);
       
-      {/* Informações de Debug (opcional - pode ser removido em produção) */}
       {process.env.NODE_ENV === 'development' && (
         <div className="bg-gray-100 rounded-lg p-4 text-xs text-gray-600">
           <h4 className="font-medium mb-2">Informações de Debug:</h4>
