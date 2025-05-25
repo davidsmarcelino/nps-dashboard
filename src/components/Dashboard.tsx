@@ -20,7 +20,7 @@ import {
   PieChart, Pie, Cell
 } from 'recharts';
 import { NPSData, NPSCategory, getNPSClassification, getNPSColor } from '../lib/npsUtils';
-
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 // Props do componente Dashboard
 interface DashboardProps {
   npsData: NPSData;
@@ -80,26 +80,64 @@ const Dashboard: React.FC<DashboardProps> = ({ npsData }) => {
   };
 
   return (
-    <div className="space-y-8">
-      {/* Cabeçalho com pontuação NPS */}
-      <div className="bg-white rounded-lg shadow-md p-6 text-center">
-        <h2 className="text-xl font-medium text-gray-700 mb-2">Pontuação NPS</h2>
-        <div className="flex justify-center items-center">
-          <div 
-            className="text-5xl font-bold rounded-full w-32 h-32 flex items-center justify-center"
-            style={{ backgroundColor: npsColor, color: npsColor === '#FFDC00' ? '#333' : 'white' }}
-          >
-            {npsData.score}
-          </div>
-        </div>
-        <p className="mt-4 text-lg font-medium" style={{ color: npsColor }}>
-          {npsClassification}
-        </p>
-        <p className="mt-2 text-sm text-gray-500">
-          Baseado em {npsData.totalRespostas} respostas válidas
-          {npsData.respostasInvalidas > 0 && ` (${npsData.respostasInvalidas} respostas inválidas ignoradas)`}
-        </p>
+   <div className="space-y-8">
+  {/* Cabeçalho com pontuação NPS */}
+  <Card className="flex flex-col items-center justify-center p-6 text-center">
+    <CardHeader className="p-0 mb-4">
+      <CardTitle className="text-xl font-medium text-gray-700">Pontuação NPS</CardTitle>
+      {/* CardDescription para a contagem de respostas válidas e inválidas */}
+      {npsData?.totalRespostas !== undefined && npsData.totalRespostas !== null && (
+          <CardDescription className="text-sm text-gray-500 mt-1">
+              Baseado em {npsData?.totalRespostas} respostas válidas
+              {npsData.respostasInvalidas > 0 && ` (${npsData.respostasInvalidas} respostas inválidas ignoradas)`}
+          </CardDescription>
+      )}
+    </CardHeader>
+    <CardContent className="flex-grow flex flex-col items-center justify-center p-0">
+      <div
+        className="text-5xl font-bold rounded-full w-32 h-32 flex items-center justify-center"
+        style={{ backgroundColor: npsColor, color: npsColor === '#FFDC00' ? '#333' : 'white' }}
+      >
+        {npsData.score !== null && npsData.score !== undefined ? npsData.score : '--'}
       </div>
+      {/* A CLASSIFICAÇÃO NPS É AGORA UMA TAG <P> DENTRO DO CARDCONTENT */}
+      <p className="mt-4 text-lg font-medium" style={{ color: npsColor }}>
+        {npsClassification}
+      </p>
+    </CardContent>
+  </Card>
+
+  {/* IMPORTANTE: Os seus outros blocos (Promotores, Neutros, Detratores)
+    e seus gráficos devem continuar AQUI, logo abaixo do Card da Pontuação NPS,
+    e AINDA DENTRO do <div className="space-y-8"> pai.
+
+    Por exemplo, algo como:
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Cartão de Promotores (ainda o antigo, se você não o substituiu) */}
+      {/* <div className="bg-white rounded-lg shadow-md p-6"> ... </div> */}
+      {/* Cartão de Neutros */}
+      {/* <div className="bg-white rounded-lg shadow-md p-6"> ... </div> */}
+      {/* Cartão de Detratores */}
+      {/* <div className="bg-white rounded-lg shadow-md p-6"> ... </div> */}
+    {/* </div> */}
+
+    {/* E depois, seus gráficos */}
+    {/* <div className="chart-section">
+      <ResponsiveContainer width="100%" height={300}>
+        <BarChart data={barData}>
+          ...
+        </BarChart>
+      </ResponsiveContainer>
+      <ResponsiveContainer width="100%" height={300}>
+        <PieChart>
+          ...
+        </PieChart>
+      </ResponsiveContainer>
+    </div> */}
+
+    {/* Qualquer outra seção do seu dashboard */}
+
+</div> {/* ESTE DIV DEVE FECHAR TODO O BLOCO 'space-y-8' */}
 
       {/* Métricas principais */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
