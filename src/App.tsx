@@ -41,7 +41,7 @@ function App() {
   const [dataInfo, setDataInfo] = useState<{
     totalRows: number;
     processedRows: number;
-    identifiedColumn: string | null;
+    identifiedColumn: string[] | null;
   } | null>(null)
 
   /**
@@ -156,7 +156,7 @@ function App() {
       setDataInfo({
         totalRows: objectData.length,
         processedRows: calculatedNPS.totalRespostas,
-        identifiedColumn: calculatedNPS.colunaIdentificada
+        identifiedColumn: calculatedNPS.colunasIdentificadas
       });
       
       // Finaliza o carregamento

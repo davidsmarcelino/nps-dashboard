@@ -73,7 +73,7 @@ const Dashboard: React.FC<DashboardProps> = ({ npsData }) => {
 
   // Informações de debug (opcional, pode ser removido em produção)
   const debugInfo = {
-    colunaIdentificada: npsData.colunaIdentificada,
+    colunaIdentificada: npsData.colunasIdentificadas,
     respostasInvalidas: npsData.respostasInvalidas,
     colunasAnalisadas: npsData.debug?.colunasAnalisadas || [],
     valoresIgnorados: npsData.debug?.valoresIgnorados || []
